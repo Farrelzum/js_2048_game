@@ -20,7 +20,16 @@ class Game {
    * If passed, the board will be initialized with the provided
    * initial state.
    */
+  board;
+
   constructor(initialState) {
+    this.board = initialState || [
+      [0, 2, 0, 2],
+      [0, 0, 0, 0],
+      [4, 0, 0, 0],
+      [0, 64, 0, 0],
+    ];
+
     // eslint-disable-next-line no-console
     console.log(initialState);
   }
@@ -55,7 +64,27 @@ class Game {
   /**
    * Starts the game.
    */
-  start() {}
+  start() {
+    const buttonStart = document.querySelector('.button.start');
+
+    buttonStart.addEventListener('click', () => {
+      const fieldCell = document.querySelectorAll('.field-cell');
+      let cellNumber = 0;
+
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+          if (this.board[i][j] > 0) {
+            fieldCell[cellNumber].textContent = this.board[i][j];
+
+            fieldCell[cellNumber].classList.add(
+              `field-cell--${this.board[i][j]}`,
+            );
+          }
+          cellNumber++;
+        }
+      }
+    });
+  }
 
   /**
    * Resets the game.

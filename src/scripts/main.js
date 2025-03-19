@@ -24,31 +24,61 @@ startButton.addEventListener(
     startButton.classList.remove('start');
     startButton.textContent = 'Restart';
     startButton.classList.add('restart');
+
+    const info = document.querySelector('.message.message-start');
+
+    info.classList.add('hidden');
   },
   { once: true },
 );
 
+// const restart = document.querySelector('.restart');
+
+// restart.addEventListener('click', () => {
+//   game.start();
+//   game.score = 0;
+//   updateScore(0);
+// });
+
 document.addEventListener('keydown', (arrow) => {
+  const copiedBoard = [...game.board];
+
   switch (arrow.key) {
     case 'ArrowUp':
       game.moveUp();
-      game.getNewCell();
-      updateSiteBoard();
+
+      if (game.checkIfMoved(copiedBoard)) {
+        game.getNewCell();
+        updateSiteBoard();
+        updateScore(game.getScore());
+      }
       break;
     case 'ArrowDown':
       game.moveDown();
-      game.getNewCell();
-      updateSiteBoard();
+
+      if (game.checkIfMoved(copiedBoard)) {
+        game.getNewCell();
+        updateSiteBoard();
+        updateScore(game.getScore());
+      }
       break;
     case 'ArrowLeft':
       game.moveLeft();
-      game.getNewCell();
-      updateSiteBoard();
+
+      if (game.checkIfMoved(copiedBoard)) {
+        game.getNewCell();
+        updateSiteBoard();
+        updateScore(game.getScore());
+      }
       break;
     case 'ArrowRight':
       game.moveRight();
-      game.getNewCell();
-      updateSiteBoard();
+
+      if (game.checkIfMoved(copiedBoard)) {
+        game.getNewCell();
+        updateSiteBoard();
+        updateScore(game.getScore());
+      }
       break;
   }
 });
@@ -68,4 +98,10 @@ function updateSiteBoard() {
       currentCell.textContent = '';
     }
   }
+}
+
+function updateScore(score) {
+  const gameScore = document.querySelector('.game-score');
+
+  gameScore.textContent = score;
 }

@@ -21,9 +21,11 @@ class Game {
    * initial state.
    */
   board;
+  score;
 
   constructor(initialState) {
     this.board = initialState;
+    this.score = 0;
   }
 
   moveLeft() {
@@ -46,8 +48,6 @@ class Game {
       this.board[row + 2] = cellValues[2];
       this.board[row + 3] = cellValues[3];
     }
-
-    console.log(this.board);
   }
 
   moveRight() {
@@ -70,8 +70,6 @@ class Game {
       this.board[row + 2] = cellValues[2];
       this.board[row + 3] = cellValues[3];
     }
-
-    console.log(this.board);
   }
 
   moveUp() {
@@ -94,8 +92,6 @@ class Game {
       this.board[column + 8] = cellValues[2];
       this.board[column + 12] = cellValues[3];
     }
-
-    console.log(this.board);
   }
 
   moveDown() {
@@ -118,14 +114,14 @@ class Game {
       this.board[column + 8] = cellValues[2];
       this.board[column + 12] = cellValues[3];
     }
-
-    console.log(this.board);
   }
 
   /**
    * @returns {number}
    */
-  getScore() {}
+  getScore() {
+    return this.score;
+  }
 
   /**
    * @returns {number[][]}
@@ -167,13 +163,16 @@ class Game {
       cell++;
     } while (cell < 16);
 
-    return [2, 0, 2, 2, 16, 0, 2, 2, 2, 0, 4, 2, 2, 2, 4, 2];
+    return initialBoard;
   }
 
   /**
    * Resets the game.
    */
-  restart() {}
+  restart() {
+    this.start();
+    this.score = 0;
+  }
 
   getRandomElement(array) {
     const randomIndex = Math.floor(Math.random() * array.length);
@@ -194,6 +193,16 @@ class Game {
         success = true;
       }
     } while (success === false);
+  }
+
+  checkIfMoved(boardBeforeMove) {
+    for (let i = 0; i < this.board.length; i++) {
+      if (boardBeforeMove[i] !== this.board[i]) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   moveCells(cellValues, start, end, way) {
@@ -217,6 +226,7 @@ class Game {
       if (cellValues[i] !== 0 && cellValues[i] === cellValues[i + 1]) {
         cellValues[i] *= 2;
         cellValues[i + 1] = 0;
+        this.score += cellValues[i];
       }
     }
   }

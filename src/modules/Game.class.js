@@ -21,10 +21,12 @@ class Game {
    * initial state.
    */
   board;
+  status;
   score;
 
   constructor(initialState) {
     this.board = initialState;
+    this.status = 'idle';
     this.score = 0;
   }
 
@@ -140,7 +142,9 @@ class Game {
    * `win` - the game is won;
    * `lose` - the game is lost
    */
-  getStatus() {}
+  getStatus() {
+    return this.status;
+  }
 
   /**
    * Starts the game.
@@ -163,12 +167,11 @@ class Game {
       cell++;
     } while (cell < 16);
 
+    this.status = 'playing';
+
     return initialBoard;
   }
 
-  /**
-   * Resets the game.
-   */
   restart() {
     this.start();
     this.score = 0;
@@ -195,6 +198,10 @@ class Game {
     } while (success === false);
   }
 
+  checkIfWon() {
+    return this.board.some((cell) => cell === 2048);
+  }
+
   checkIfMoved(boardBeforeMove) {
     for (let i = 0; i < this.board.length; i++) {
       if (boardBeforeMove[i] !== this.board[i]) {
@@ -203,6 +210,44 @@ class Game {
     }
 
     return false;
+  }
+
+  checkIfLose() {
+    if (this.board.some((cellValue) => cellValue === 0)) {
+      return false;
+    }
+
+    for (let column = 0; column < 4; column++) {
+      const cellValues = [
+        this.board[column],
+        this.board[column + 4],
+        this.board[column + 8],
+        this.board[column + 12],
+      ];
+
+      for (let i = 0; i < 2; i++) {
+        if (cellValues[i] === cellValues[i + 1]) {
+          return false;
+        }
+      }
+    }
+
+    for (let row = 0; row < 16; row += 4) {
+      const cellValues = [
+        this.board[row],
+        this.board[row + 1],
+        this.board[row + 2],
+        this.board[row + 3],
+      ];
+
+      for (let i = 0; i < 2; i++) {
+        if (cellValues[i] === cellValues[i + 1]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   moveCells(cellValues, start, end, way) {
